@@ -6,40 +6,36 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
+    public static StringBuilder sb = new StringBuilder();
+    public static boolean[] visited;
+    public static int[] arr;
     public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 		
-        int A = Integer.parseInt(br.readLine());
-        int[][] comp_arr = new int[A][2];
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
-        for(int i = 0; i < A; i++){
-            st = new StringTokenizer(br.readLine(), " ");
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
-
-            comp_arr[i][0] = x;
-            comp_arr[i][1] = y;
-        }
-
-        for(int i = 0; i < A; i++){
-            int cnt = 1;
-            for(int j = 0; j < A; j++){
-                if(i == j){
-                    continue;
-                }
-                if(comp_arr[i][0] < comp_arr[j][0] && comp_arr[i][1] < comp_arr[j][1]){
-                    cnt++;
-                }
-            }
-            sb.append(cnt).append(" ");
-        }
+        visited = new boolean[N];
+        arr = new int[M];
+        dfs(N, M, 0);
         System.out.println(sb);
+    }    
+    public static void dfs(int N, int M, int depth){
+        if (depth == M) {
+			for (int val : arr) {
+				sb.append(val).append(' ');
+			}
+			sb.append('\n');
+			return;
+		}
+        for(int i = 0; i < N; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                arr[depth] = i + 1;  //// 해당 깊이를 index로 하여 i + 1 값 저장
+                dfs(N, M, depth + 1);  //// 다음 자식 노드 방문을 위해 depth 1 증가시키면서 재귀호출
+                visited[i] = false;  //// 자식노드 방문이 끝나고 돌아오면 방문노드를 방문하지 않은 상태로 변경
+            }
+        }
     }
 }
-
-/*
-System.out.println();
-(x, y), (p, q)라고 할 때 x > p 그리고 y > q 이라면 우리는 A의 덩치가 B의 덩치보다 "더 크다"
-*/
